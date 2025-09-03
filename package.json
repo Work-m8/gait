@@ -1,11 +1,11 @@
 {
-  "name": "@gait/cli",
+  "name": "@workm8/gait",
   "version": "0.0.1",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "gait": "./dist/bin/git-ai.js"
+    "gait": "./dist/index.js"
   },
   "scripts": {
     "build": "tsc",
