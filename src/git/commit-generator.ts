@@ -1,10 +1,17 @@
 import { Agent } from '@mastra/core/agent';
-import { GitManager, Status } from "./git-manager";
+import { GitManager, GitStatus } from "./git-manager";
+import { CommitFormat } from './commit-format';
 
 interface Validation {
     valid: boolean;
     errors: string[];
     warnings: string[];
+}
+
+export interface DiffSummary {
+    status: GitStatus;
+    diff: string;
+    summary: string;
 }
 
 export class CommitMessageGenerator {
@@ -32,9 +39,8 @@ export class CommitMessageGenerator {
         const prompt = this.buildPrompt(diffSummary, options);
       
         // Generate message with AI
-        return this.agent.generate(prompt)
+        return this.agent.generateVNext(prompt)
             .then((res) => {
-                console.log(res);
                 return this.postProcessMessage(res.text, options);
             });
     }
@@ -42,7 +48,7 @@ export class CommitMessageGenerator {
     /**
      * Build prompt for AI service
      */
-    buildPrompt(diffSummary: { diff: string; status: Status }, options: any = {}) {
+    buildPrompt(diffSummary: DiffSummary, options: any = {}) {
         let prompt = 'Generate a commit message for the following Git changes:\n\n';
       
         // Add file changes summary
@@ -144,7 +150,7 @@ export class CommitMessageGenerator {
     /**
      * Validate commit message format
      */
-    validateMessage(message: string, format = 'conventional') {
+    validateMessage(message: string, format: CommitFormat = 'conventional') {
         const lines = message.split('\n');
         const firstLine = lines[0]!;
       
@@ -189,7 +195,7 @@ export class CommitMessageGenerator {
     /**
      * Get suggestions for improving a commit message
      */
-    async getSuggestions(message: string, diffSummary: { status: Status, diff: string[]}) {
+    async getSuggestions(message: string, diffSummary: DiffSummary) {
         const suggestions = [];
         
         // Analyze the changes for specific suggestions
@@ -258,7 +264,7 @@ export class CommitMessageGenerator {
       /**
        * Generate alternative commit messages
        */
-      async generateAlternatives(diffSummary: { status: Status}, options = {}, count = 3) {
+      async generateAlternatives(diffSummary: DiffSummary, options = {}, count = 3) {
         const alternatives = [];
         
         for (let i = 0; i < count; i++) {

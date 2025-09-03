@@ -9,14 +9,12 @@ import { GitManager } from './git/git-manager';
 import { CommitMessageGenerator } from './git/commit-generator';
 
 import { gitAgent } from './mastra/agents/git-agent';
+import { CommitFormat } from './git/commit-format';
 
 // Load environment variables
 dotenv.config();
 
 const program = new Command();
-
-export type CommitFormat = 'conventional' | 'simple' | 'detailed';
-
 
 // CLI Command Options
 export interface GenerateCommandOptions {
@@ -29,6 +27,8 @@ export interface CommitCommandOptions {
     files?: string;
     dryRun?: boolean;
     interactive?: boolean;
+    format?: CommitFormat;
+    maxLength?: string;
 }
 
 export interface StatusCommandOptions {
@@ -106,6 +106,9 @@ program
     .action(async (options: CommitCommandOptions) => {
         const spinner = ora('Analyzing repository...').start();
     
+        const format = options.format || 'conventional';
+        const maxLength = options.maxLength || '5000';
+
         try {
             const repoPath = program.opts().repo;
             const verbose = program.opts().verbose;
@@ -130,8 +133,11 @@ program
       
             spinner.text = 'Generating commit message...';
       
-            let message = await generator.generateCommitMessage();
-      
+            let message = await generator.generateCommitMessage({
+                format: format,
+                maxLength: parseInt(maxLength)
+            });
+     
             spinner.succeed('Generated commit message:');
             console.log('\n' + chalk.cyan('─'.repeat(60)));
             console.log(chalk.white(message));

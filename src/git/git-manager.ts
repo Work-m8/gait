@@ -2,7 +2,7 @@ import simpleGit, { SimpleGit } from 'simple-git';
 import path from 'path';
 import fs from 'fs/promises';
 
-export interface Status {
+export interface GitStatus {
     added: string[];
     modified: string[];
     deleted: string[];
@@ -24,7 +24,7 @@ export class GitManager {
     /**
      * Get repository status
     */
-    async getStatus(): Promise<Status> {
+    async getStatus(): Promise<GitStatus> {
         try {
             const status = await this.git.status();
             
@@ -86,7 +86,7 @@ export class GitManager {
     /**
      * Create a human-readable summary
     */
-    createSummary(status: Status, diff: string) {
+    createSummary(status: GitStatus, diff: string) {
         let summary = 'Git Status:\n';
     
         if (status.added.length > 0) {
