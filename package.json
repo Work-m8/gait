@@ -17,6 +17,7 @@
     "@ai-sdk/openai": "^2.0.23",
     "@mastra/core": "^0.15.2",
     "@mastra/loggers": "^0.10.9",
+    "ai-sdk-ollama": "^0.5.4",
     "commander": "^14.0.0",
     "inquirer": "^12.9.4",
     "ora": "^8.2.0",
