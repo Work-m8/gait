@@ -1,0 +1,27 @@
+{
+  "name": "@gait/cli",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "gait": "./dist/bin/git-ai.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "ts-node src/index.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@ai-sdk/openai": "^2.0.23",
+    "@mastra/core": "^0.15.2",
+    "@mastra/loggers": "^0.10.9",
+    "commander": "^14.0.0",
+    "inquirer": "^12.9.4",
+    "ora": "^8.2.0",
+    "simple-git": "^3.28.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  }
+}
